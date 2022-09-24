@@ -38,6 +38,8 @@ class AuthProvider with ChangeNotifier {
         final localStorage = await SharedPreferences.getInstance();
         final userData = json.encode(
             {'name': responseData['name'], 'mobile': responseData['mobile']});
+        currentUser =
+            User(mobile: responseData['mobile'], name: responseData['name']);
         localStorage.setString("token", responseData["token"]);
         localStorage.setString("userData", userData);
         return false;
@@ -125,6 +127,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> logOut() async {
     final localStorage = await SharedPreferences.getInstance();
     localStorage.clear();
+    currentUser = null;
     notifyListeners();
   }
 

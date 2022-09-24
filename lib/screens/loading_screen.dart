@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:quizu/models/http_exception.dart';
+import 'package:quizu/providers/questions.dart';
+import 'package:quizu/providers/scores.dart';
 import 'package:quizu/screens/login_screen.dart';
 import 'package:quizu/screens/name_screen.dart';
 import 'package:quizu/screens/navbar.dart';
@@ -35,6 +37,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
       loginSubmit();
     } else if (argument != {} && argument['screen'] == "name") {
       nameSubmit();
+    } else if (argument != {} && argument['screen'] == "logout") {
+      Future.delayed(const Duration(milliseconds: 800), () {
+        logOut();
+      });
     }
     super.didChangeDependencies();
   }
@@ -49,7 +55,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       if (status == true) {
         Navigator.of(context).pushReplacementNamed(NameScreen.routeName);
       } else {
-        Navigator.of(context).pushReplacementNamed(NavBar.routeName);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(NavBar.routeName, (route) => false);
       }
     } on HttpException catch (_) {
       Navigator.of(context).pushReplacementNamed(LoginScreen.routeName,
@@ -72,7 +79,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
 //---------------------------------------------------------
 
-  void logOut() {}
+  void logOut() async {
+    Provider.of<QuestionsProvider>(context, listen: false).logOut;
+    Provider.of<ScoresProvider>(context, listen: false).logOut;
+    await Provider.of<AuthProvider>(context, listen: false).logOut();
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushReplacementNamed('/');
+  }
+
 //---------------------------------------------------------
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:quizu/widgets/button.dart';
 import 'package:quizu/widgets/otp.dart';
-import 'package:quizu/widgets/text_field_template.dart';
-
+import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
 //==============================================================================
 
 class LoginScreen extends StatefulWidget {
@@ -134,20 +136,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      FilledTextField(
-                          controller: input,
-                          onChangedFunction: (val) {
-                            mobile = val;
+                      Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white),
+                        child: InternationalPhoneNumberInput(
+                          textFieldController: input,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                          spaceBetweenSelectorAndTextField: 0,
+                          inputBorder: InputBorder.none,
+                          selectorConfig: const SelectorConfig(
+                              leadingPadding: 10,
+                              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                              showFlags: true,
+                              setSelectorButtonAsPrefixIcon: true),
+                          initialValue: phone.PhoneNumber(
+                              phoneNumber: "+966",
+                              dialCode: "+966",
+                              isoCode: "SA"),
+                          onInputChanged: (val) {
+                            mobile = val.phoneNumber ?? "";
                           },
-                          hint: "0500000000",
-                          icon: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                                height: 20,
-                                child: Image.asset(
-                                    'assets/icons/saudi-arabia.png')),
-                          ),
-                          isPassword: false),
+                        ),
+                      ),
                       const SizedBox(
                         height: 5,
                       ),

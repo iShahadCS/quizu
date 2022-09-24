@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quizu/providers/scores.dart';
+import 'package:quizu/screens/loading_screen.dart';
 import 'package:quizu/widgets/circle_button.dart';
 import 'package:quizu/widgets/profile_image.dart';
-
 import '../providers/auth.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -45,12 +45,9 @@ class ProfileScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: screenSize.viewPadding.top + 20, right: 25),
                   child: CircleButton(
-                    onTap: () async {
-                      await Provider.of<AuthProvider>(context, listen: false)
-                          .logOut();
-                      // ignore: use_build_context_synchronously
-                      Navigator.of(context).pushReplacementNamed('/');
-                    },
+                    onTap: () => Navigator.of(context).pushReplacementNamed(
+                        LoadingScreen.routeName,
+                        arguments: {"screen": "logout"}),
                     icon: Icons.logout,
                   ))),
           Stack(

@@ -61,4 +61,10 @@ class QuestionsProvider with ChangeNotifier {
   void resetIndex() {
     currentQuestion = 0;
   }
+
+  void logOut() {
+    currentQuestion = 0;
+    questions = [];
+    notifyListeners();
+  }
 }

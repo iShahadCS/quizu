@@ -93,4 +93,11 @@ class ScoresProvider with ChangeNotifier {
   List<LeaderboardScore> get getLeaderBoardScores {
     return [...leaderBored];
   }
+
+  void logOut() {
+    userScores = [];
+    localStorageUserScores = [];
+    leaderBored = [];
+    notifyListeners();
+  }
 }

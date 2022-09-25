@@ -18,6 +18,7 @@ class _AnswersListState extends State<AnswersList> {
   bool visible = true;
   bool answerStatus = false;
   String chosenAnswer = '';
+  bool isButtonDisabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,33 +37,38 @@ class _AnswersListState extends State<AnswersList> {
         children: [
           GestureDetector(
             onTap: () {
-              chosenAnswer = answers[i];
-              answerStatus =
-                  Provider.of<QuestionsProvider>(context, listen: false)
-                      .checkChosenAnswer(chosenAnswer);
+              if (!isButtonDisabled) {
+                chosenAnswer = answers[i];
+                answerStatus =
+                    Provider.of<QuestionsProvider>(context, listen: false)
+                        .checkChosenAnswer(chosenAnswer);
 
-              widget.correctAnswerPressed(answerStatus);
-              if (answerStatus) {
-                setState(() {
-                  visible = false;
-                  showCorrect = true;
-                });
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (context) => MessageDialog(
-                          firstButtonFunctoin: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(Quiz.routeName);
-                          },
-                          image: 'assets/icons/wrong.png',
-                          title: "Wrong answer",
-                          buttonText: 'Try Again',
-                          extraButton: true,
-                          buttonText2: 'Close',
-                          secondButtonFunction: () =>
-                              Navigator.of(context).pushReplacementNamed('/'),
-                        ));
+                widget.correctAnswerPressed(answerStatus);
+
+                if (answerStatus) {
+                  setState(() {
+                    isButtonDisabled = true;
+                    visible = false;
+                    showCorrect = true;
+                  });
+                } else {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => MessageDialog(
+                            firstButtonFunctoin: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(Quiz.routeName);
+                            },
+                            image: 'assets/icons/wrong.png',
+                            title: "Wrong answer",
+                            buttonText: 'Try Again',
+                            extraButton: true,
+                            buttonText2: 'Close',
+                            secondButtonFunction: () =>
+                                Navigator.of(context).pushReplacementNamed('/'),
+                          ));
+                }
               }
             },
             child: AnimatedOpacity(
@@ -70,6 +76,7 @@ class _AnswersListState extends State<AnswersList> {
               duration: const Duration(milliseconds: 800),
               onEnd: () {
                 setState(() {
+                  isButtonDisabled = false;
                   visible = true;
                   showCorrect = false;
                 });

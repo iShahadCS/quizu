@@ -43,6 +43,7 @@ class LeaderBoardScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   leaderboardList[i].name,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 23,

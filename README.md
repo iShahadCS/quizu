@@ -61,7 +61,7 @@ flutter run
 
   ![quiz](https://user-images.githubusercontent.com/82725533/192157337-ac772754-334d-4eb0-8709-d33c066a7b0a.png)
 
-- Quiz result
+- Quiz Result
 
   ![win](https://user-images.githubusercontent.com/82725533/192157272-4d9439bf-331f-4d07-ac6f-4c83de697860.png)
   

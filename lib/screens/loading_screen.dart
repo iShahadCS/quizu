@@ -39,7 +39,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
       nameSubmit();
     } else if (argument != {} && argument['screen'] == "logout") {
       Future.delayed(const Duration(milliseconds: 800), () {
-        logOut();
+        if (mounted) {
+          logOut();
+        }
       });
     }
     super.didChangeDependencies();
@@ -55,8 +57,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
       if (status == true) {
         Navigator.of(context).pushReplacementNamed(NameScreen.routeName);
       } else {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(NavBar.routeName, (route) => false);
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+        }
       }
     } on HttpException catch (_) {
       Navigator.of(context).pushReplacementNamed(LoginScreen.routeName,
@@ -73,7 +76,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
       await Provider.of<AuthProvider>(context, listen: false)
           .name(token, argument['name']);
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacementNamed(NavBar.routeName);
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      }
     } catch (_) {}
   }
 
@@ -83,8 +88,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Provider.of<QuestionsProvider>(context, listen: false).logOut;
     Provider.of<ScoresProvider>(context, listen: false).logOut;
     await Provider.of<AuthProvider>(context, listen: false).logOut();
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacementNamed('/');
+    Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
   }
 
 //---------------------------------------------------------

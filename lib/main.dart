@@ -39,11 +39,23 @@ class MyApp extends StatelessWidget {
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const LoadingScreen();
-                  } else if (snapshot.data == true) {
-                    return const NavBar();
+                  } else if (snapshot.hasData) {
+                    if (snapshot.data == true) {
+                      return const NavBar();
+                    } else {
+                      return const LoginScreen();
+                    }
                   } else {
-                    return const LoginScreen();
+                    return const LoadingScreen();
                   }
+                  // print(snapshot.data);
+                  // if (snapshot.connectionState != ConnectionState.done) {
+                  //   return const LoadingScreen();
+                  // } else if (snapshot.data == true) {
+                  //   return const NavBar();
+                  // } else {
+                  //   return const LoginScreen();
+                  // }
                 },
               ),
               // home: const Quiz(),

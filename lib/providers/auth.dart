@@ -32,6 +32,7 @@ class AuthProvider with ChangeNotifier {
         // true returned when the user has no name || status is new
         final localStorage = await SharedPreferences.getInstance();
         localStorage.setString("token", responseData["token"]);
+        notifyListeners();
         return true;
       } else {
         // false returned when the user has a name || status is Token returning
@@ -42,6 +43,8 @@ class AuthProvider with ChangeNotifier {
             User(mobile: responseData['mobile'], name: responseData['name']);
         localStorage.setString("token", responseData["token"]);
         localStorage.setString("userData", userData);
+        notifyListeners();
+
         return false;
       }
     }
@@ -68,15 +71,18 @@ class AuthProvider with ChangeNotifier {
         {'name': responseData['name'], 'mobile': responseData['mobile']});
     final localStorage = await SharedPreferences.getInstance();
     localStorage.setString("userData", userData);
+    notifyListeners();
   }
 
 //---------------------------------------------------------
 
   Future<bool> tryAutoLogin() async {
     final localStorage = await SharedPreferences.getInstance();
+    localStorage.reload();
+
     if (localStorage.containsKey("token")) {
-      localStorage.reload();
       final token = localStorage.getString("token");
+
       final url = Uri.parse('https://quizu.okoul.com/Token');
       final response = await http.get(
         url,
